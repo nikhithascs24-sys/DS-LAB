@@ -1,0 +1,183 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+
+struct Node *head = NULL;
+
+
+
+void createList(int n) {
+    struct Node *newNode, *temp;
+    int data, i;
+
+    head = NULL;
+
+    for (i = 0; i < n; i++) {
+        newNode = (struct Node*) malloc(sizeof(struct Node));
+        if (newNode == NULL) {
+            printf("Memory allocation failed!\n");
+            return;
+        }
+
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        newNode->data = data;
+        newNode->next = NULL;
+
+        if (head == NULL)
+            head = newNode;
+        else
+            temp->next = newNode;
+
+        temp = newNode;
+    }
+
+    printf("\nLinked list created successfully!\n");
+}
+
+void displayList() {
+    struct Node *temp = head;
+
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
+
+    printf("\nLinked list contents:\n");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+
+
+void deleteAtPosition(int pos) {
+    struct Node *temp = head;
+    struct Node *prev = NULL;
+    int i;
+
+    if (head == NULL) {
+        printf("List is empty, nothing to delete!\n");
+        return;
+    }
+
+
+        head = head->next;
+        free(temp);
+        printf("Node deleted from position 1.\n");
+        return;
+    }
+
+    for (i = 1; i < pos && temp != NULL; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Invalid position!\n");
+        return;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+
+    printf("Node deleted from position %d.\n", pos);
+}
+
+void deleteAtBeginning() {
+    struct Node *temp;
+
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
+
+    temp = head;
+    head = head->next;
+    free(temp);
+
+    printf("First node deleted successfully.\n");
+}
+
+
+void deleteAtEnd() {
+    struct Node *temp = head, *prev;
+
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
+
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+    } else {
+        while (temp->next != NULL) {
+            prev = temp;
+            temp = temp->next;
+        }
+        prev->next = NULL;
+        free(temp);
+    }
+
+    printf("Last node deleted successfully.\n");
+}
+
+int main() {
+    int n, choice, data, pos;
+
+    printf("Enter the number of nodes to create: ");
+    scanf("%d", &n);
+    createList(n);
+    displayList();
+
+    while (1) {
+
+        printf("\n\n---- MENU ----\n");
+        printf("1. Display List\n");
+        printf("2. Delete at Beginning\n");
+        printf("3. Delete at End\n");
+        printf("4. Delete at Position\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayList();
+                break;
+            case 2:
+                deleteAtBeginning();
+                break;
+
+            case 3:
+                deleteAtEnd();
+                break;
+
+            case 4:
+                printf("Enter position to delete: ");
+                scanf("%d", &pos);
+                deleteAtPosition(pos);
+                break;
+
+            case 5:
+                printf("Exiting program.\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
