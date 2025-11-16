@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+/* create list by reading n integers; modifies actual head */
+void create(int n, struct node **head) {
+    struct node *newnode, *temp = NULL;
+    int data;
+
+    *head = NULL;  // actual head is set to NULL
+
+    for (int i = 0; i < n; i++) {
+        newnode = (struct node*)malloc(sizeof(struct node));
+        printf("Enter value for node %d: ", i + 1);
+        scanf("%d", &data);
+
+        newnode->data = data;
+        newnode->next = NULL;
+
+        if (*head == NULL) {     // first node
+            *head = newnode;
+        } else {
+            temp->next = newnode;
+        }
+        temp = newnode;
+    }
+}
+
+void display(struct node *head) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    struct node *temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+/* bubble sort by swapping data */
+void bubbleSort(struct node *head) {
+    if (head == NULL) return;
+    struct node *last = NULL;
+
+    while (1) {
+        int swapped = 0;
+        struct node *ptr = head;
+
+        while (ptr->next != last) {
+            if (ptr->data > ptr->next->data) {
+                int tmp = ptr->data;
+                ptr->data = ptr->next->data;
+                ptr->next->data = tmp;
+                swapped = 1;
+            }
+            ptr = ptr->next;
+        }
+        last = ptr;
+        if (!swapped) break;
+    }
+}
+
+struct node* reverse(struct node *head) {
+    struct node *prev = NULL, *cur = head, *next = NULL;
+
+    while (cur) {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+    return prev;
+}
+
+struct node* concatenate(struct node *head1, struct node *head2) {
+    if (head1 == NULL) return head2;
+
+    struct node *temp = head1;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = head2;
+    return head1;
+}
+
+int main() {
+    struct node *head1 = NULL;
+    struct node *head2 = NULL;
+    int n, choice;
+
+    printf("Enter number of elements for List1: ");
+    scanf("%d", &n);
+    create(n, &head1);
+
+    while (1) {
+        printf("\n===== MENU =====\n");
+        printf("1. Display List1\n");
+        printf("2. Sort List1\n");
+        printf("3. Reverse List1\n");
+        printf("4. Concatenate List1 + List2\n");
+        printf("5. Display List2\n");
+        printf("6. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                display(head1);
+                break;
+
+            case 2:
+                bubbleSort(head1);
+                printf("List1 sorted.\n");
+                break;
+
+            case 3:
+                head1 = reverse(head1);
+                printf("List1 reversed.\n");
+                break;
+
+            case 4:
+                if (head2 == NULL) {
+                    printf("Enter number of elements for List2: ");
+                    scanf("%d", &n);
+                    create(n, &head2);
+                }
+                head1 = concatenate(head1, head2);
+                printf("Lists concatenated.\n");
+                break;
+
+            case 5:
+                display(head2);
+                break;
+
+            case 6:
+                printf("Exiting...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+}
